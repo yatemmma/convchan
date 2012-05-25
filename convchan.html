@@ -1,0 +1,102 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>convchan 0.1</title>
+</head>
+<body onLoad="init();">
+<style type="text/css">
+  *{margin:0;padding:0;font-size:12px;}
+  body{margin:8px;}
+  a{color:black}
+  h1{display:inline}
+  .box{width:320px}
+</style>
+<h1>convchan 0.1</h1> (<a href="https://twitter.com/yatemmma" target="_blank">@yatemmma</a>) <br />
+<br />
+<form name="form">
+1. <input type="text" class="box" value="こんぶ" /> <input type="text" class="box" value="昆布" /> <br />
+2. <input type="text" class="box" value="^([0-9]{4})/([0-9]{2})/([0-9]{2})" /> <input type="text" class="box" value="$1年$2月$3日" /> <br />
+3. <input type="text" class="box" value="(convchan)" /> <input type="text" class="box" value="*$1*" /> <br />
+4. <input type="text" class="box" value="" /> <input type="text" class="box" value="" /> <br />
+5. <input type="text" class="box" value="" /> <input type="text" class="box" value="" /> <br />
+<input type="button" value="変換する" style="width:120px" onClick="conv();" />
+<input type="button" value="クリア" style="width:60px" onClick="clearBox();" />
+<textarea id="ta" rows="50" wrap="off" style="width:100%;" spellcheck="false">convchan
+
+連続置換ツールです。
+上から順に文字列置換を繰り返します。
+
+置換文字列はURLにセットされます。ブックマークしておくと便利です。
+
+こんぶ酢こんぶよろこんぶ
+2011/01/01 2011/01/01
+2011/02/01 2011/01/01
+2011/03/01 2011/01/01
+
+いろいろ便利にしていきます。
+
+</textarea>
+</form>
+
+<script type="text/javascript">
+
+function conv() {
+	var ta = document.getElementById('ta');
+	ta.value = replaceAll(ta.value, getItems());
+	setParams();
+}
+
+function getItems() {
+	var items = new Array();
+	var inputs = document.form.getElementsByClassName('box');
+	var i = 0;
+	while (i < inputs.length) {
+		var obj = {};
+		obj.r = inputs[i].value;
+		i++;
+		obj.s = inputs[i].value;
+		items.push(obj);
+		i++;
+	}
+	return items;
+}
+
+function replaceAll(text, items) {
+	var t = text;
+	for (var i in items) {
+		var reg = new RegExp(items[i].r, "mg");
+		t = t.replace(reg, items[i].s);
+	}
+	return t;
+}
+
+function clearBox() {
+	var inputs = document.form.getElementsByClassName('box');
+	for (var i = 0; i < inputs.length; i++) {
+		inputs[i].value = '';
+	}
+}
+
+function setParams() {
+	var params = "#";
+	var inputs = document.form.getElementsByClassName('box');
+	for (var i = 0; i < inputs.length; i++) {
+		params = params + '/' + encodeURIComponent(inputs[i].value);
+	}
+	window.location = params;
+}
+
+function init() {
+	if (window.location.href.indexOf('#') == -1) {
+		return;
+	}
+	var params = window.location.href.slice(window.location.href.indexOf('#')+2).split('/');
+	var inputs = document.form.getElementsByClassName('box');
+	for (var i = 0; i < inputs.length; i++) {
+		inputs[i].value = decodeURIComponent(params[i]);
+	}
+}
+</script>
+</body>
+</html>
+
