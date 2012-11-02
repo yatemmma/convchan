@@ -9,9 +9,11 @@
   body{margin:8px;}
   a{color:black}
   h1{display:inline}
+  h1 a{text-decoration:none}
   .box{width:320px}
+  #info{position: fixed;top:8px;right:8px}
 </style>
-<h1>convchan 0.1</h1> (<a href="https://twitter.com/yatemmma" target="_blank">@yatemmma</a>) <br />
+<h1><a id="toplink" href="#">convchan 0.1</a></h1> <br />
 <br />
 <form name="form">
 1. <input type="text" class="box" value="こんぶ" /> <input type="text" class="box" value="昆布" /> <br />
@@ -35,8 +37,13 @@
 
 いろいろ便利にしていきます。
 
+
 </textarea>
 </form>
+
+<div id="info">
+<a href="https://twitter.com/yatemmma" target="_blank">@yatemmma</a>
+</div>
 
 <script type="text/javascript">
 
@@ -87,7 +94,12 @@ function setParams() {
 }
 
 function init() {
-	if (window.location.href.indexOf('#') == -1) {
+
+	var url = window.location.href;
+	setToplink(url);
+
+	if (window.location.href.indexOf('#') == -1
+			|| window.location.href.indexOf('#')+1 == window.location.href.length) {
 		return;
 	}
 	var params = window.location.href.slice(window.location.href.indexOf('#')+2).split('/');
@@ -95,6 +107,17 @@ function init() {
 	for (var i = 0; i < inputs.length; i++) {
 		inputs[i].value = decodeURIComponent(params[i]);
 	}
+	var ta = document.getElementById('ta');
+	ta.value = '';
+}
+
+function setToplink(url) {
+	var link = url;
+	if (url.indexOf('#') != -1) {
+		link = url.split('#')[0];
+	}
+	var toplink = document.getElementById('toplink');
+	toplink.href = link;
 }
 </script>
 </body>
