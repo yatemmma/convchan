@@ -18,7 +18,7 @@
 <form name="form">
 1. <input type="text" class="box" value="こんぶ" /> <input type="text" class="box" value="昆布" /> <br />
 2. <input type="text" class="box" value="^([0-9]{4})/([0-9]{2})/([0-9]{2})" /> <input type="text" class="box" value="$1年$2月$3日" /> <br />
-3. <input type="text" class="box" value="(convchan)" /> <input type="text" class="box" value="*$1*" /> <br />
+3. <input type="text" class="box" value="(convchan)" /> <input type="text" class="box" value="*\t$1\t*" /> <br />
 4. <input type="text" class="box" value="" /> <input type="text" class="box" value="" /> <br />
 5. <input type="text" class="box" value="" /> <input type="text" class="box" value="" /> <br />
 <input type="button" value="変換する" style="width:120px" onClick="conv();" />
@@ -50,7 +50,7 @@
 function conv() {
 	var ta = document.getElementById('ta');
 	ta.value = replaceAll(ta.value, getItems());
-	setParams();
+	setUrlParams();
 }
 
 function getItems() {
@@ -59,9 +59,9 @@ function getItems() {
 	var i = 0;
 	while (i < inputs.length) {
 		var obj = {};
-		obj.r = inputs[i].value;
+		obj.regexp = inputs[i].value;
 		i++;
-		obj.s = inputs[i].value;
+		obj.substr = inputs[i].value;
 		items.push(obj);
 		i++;
 	}
@@ -71,8 +71,9 @@ function getItems() {
 function replaceAll(text, items) {
 	var t = text;
 	for (var i in items) {
-		var reg = new RegExp(items[i].r, "mg");
-		t = t.replace(reg, items[i].s);
+		var reg = new RegExp(items[i].regexp, "mg");
+		t = t.replace(reg, items[i].substr);
+		t = t.replace("\\t", "\t", "g").replace("\\n", "\n", "g").replace("\\r", "\r", "g");
 	}
 	return t;
 }
@@ -84,7 +85,7 @@ function clearBox() {
 	}
 }
 
-function setParams() {
+function setUrlParams() {
 	var params = "#";
 	var inputs = document.form.getElementsByClassName('box');
 	for (var i = 0; i < inputs.length; i++) {
