@@ -51,6 +51,7 @@ function conv() {
 	var ta = document.getElementById('ta');
 	ta.value = replaceAll(ta.value, getItems());
 	setUrlParams();
+	ta.select();
 }
 
 function getItems() {
