@@ -95,6 +95,9 @@ function add() {
 }
 
 function del(target) {
+  if (target.parentElement.parentElement.children.length == 1) {
+    return;
+  }
   target.parentElement.parentElement.removeChild(target.parentElement);
 }
 
