@@ -13,7 +13,7 @@
   .box{width:320px}
   #info{position: fixed;top:8px;right:8px}
 </style>
-<h1><a id="toplink" href="#">convchan 0.0.2</a></h1> <br />
+<h1><a id="toplink" href="#">convchan 0.0.3</a></h1> <br />
 <br />
 <form name="form">
 1. <input type="text" class="box" value="こんぶ" /> <input type="text" class="box" value="昆布" /> <br />
@@ -23,6 +23,7 @@
 5. <input type="text" class="box" value="" /> <input type="text" class="box" value="" /> <br />
 <input type="button" value="変換する" style="width:120px" onClick="conv();" />
 <input type="button" value="クリア" style="width:60px" onClick="clearBox();" />
+<a id="download" style="display:none;" href="#" target="blank">download</a>
 <textarea id="ta" rows="50" wrap="off" style="width:100%;" spellcheck="false">convchan
 
 連続置換ツールです。
@@ -52,6 +53,7 @@ function conv() {
 	var ta = document.getElementById('ta');
 	ta.value = replaceAll(ta.value, getItems());
 	setUrlParams();
+	setDownloadUrl(ta.value);
 	ta.select();
 }
 
@@ -94,6 +96,17 @@ function setUrlParams() {
 		params = params + '/' + encodeURIComponent(inputs[i].value);
 	}
 	window.location = params;
+}
+
+function setDownloadUrl(value) {
+  var anchor = document.getElementById('download');
+  anchor.style.display = 'inline';
+  var blob = new Blob([value], {"type" : "text/plain"});
+  if (window.URL) {
+    anchor.href = window.URL.createObjectURL(blob);
+  } else if (window.webkitURL) {
+    anchor.href = window.webkitURL.createObjectURL(blob);
+  } 
 }
 
 function init() {
