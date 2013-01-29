@@ -97,7 +97,7 @@ textarea {
   <div id="header">
     <div id="title">
       <h1><a href="#">convchan</a></h1>
-      <span id="version">0.0.3</span>
+      <span id="version">0.1.0</span>
     </div>
     <div id="links">
       <a target="_blank" href="https://twitter.com/yatemmma" class="brandico-twitter-bird"> twitter</a>
@@ -121,7 +121,7 @@ textarea {
     <div class="item">
       <span class="entypo-right"></span>
       <input type="text" class="box" value="(convchan)" />
-      <input type="text" class="box" value="*\t$1\t*" />
+      <input type="text" class="box" value="*\t$1" />
       <button>-</button>
     </div>
   </div>
@@ -130,6 +130,7 @@ textarea {
     <button id="add">+</button>
     <button id="conv">convert</button>
     <button id="clear">clear</button>
+    <a id="download" style="display:none;" href="#" target="blank" title="right click save">download</a>
   </div>
 
   <div id="text">
@@ -184,6 +185,8 @@ function registEvents() {
   $("#conv").click(function() {
     conv();
     window.location = itemsToUrl();
+    setDownloadUrl($("textarea").val());
+    $("textarea").select();
   });
   $("#clear").click(function() {
     clearItems();
@@ -292,6 +295,17 @@ function selfUrl() {
     url = url.split('#')[0];
   }
   return url;
+}
+
+function setDownloadUrl(value) {
+  var anchor = document.getElementById('download');
+  anchor.style.display = 'inline';
+  var blob = new Blob([value], {"type" : "text/plain"});
+  if (window.URL) {
+    anchor.href = window.URL.createObjectURL(blob);
+  } else if (window.webkitURL) {
+    anchor.href = window.webkitURL.createObjectURL(blob);
+  } 
 }
 
 function isEmpty(val) {
